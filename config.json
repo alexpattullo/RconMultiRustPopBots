@@ -1,0 +1,20 @@
+{   "RefreshRate":10,
+    "GlobalBotDiscordToken":"",
+
+    "Servers":[
+        {
+            "name":"server_name_1",
+            "ip":"168.100.161.191",
+            "rcon_port":28065,
+            "rcon_password":"",
+            "discord_bot_token":""
+        },
+        {
+            "name":"server_name_2",
+            "ip":"168.100.161.191",
+            "rcon_port":28085,
+            "rcon_password":"",
+            "discord_bot_token":""
+        }
+    ]
+}
