@@ -69,16 +69,21 @@ class RconManager:
                          ### CONNECTION LOST ###
                          print(f"⚠️ : Lost connection to {self.ip}:{self.port} {self.nickname} {datetime.now()}, attempting to reconnect...")
 
+
+                         #End Tasks
+                         if self.rcon_messages_task and not self.rcon_messages_task.done():
+                              self.rcon_messages_task.cancel()
+                              try:
+                                   await self.rcon_messages_task
+                              except asyncio.CancelledError:
+                                   pass
+
                          #Close the current session
                          if self.server_session:
                               await self.server_session.close()
                          self.server_rcon_connection = None
 
-                         #End Tasks
-                         if self.rcon_messages_task and not self.rcon_messages_task.done():
-                              self.rcon_messages_task.cancel()
 
-                   
                     if self.first_connection:
                          self.first_connection = False
 
@@ -157,7 +162,7 @@ class RconManager:
                     try:
                          #Up to 60s timeout
                          async for message in self.server_rcon_connection:
-                              await asyncio.wait_for(self.process_rcon_messages(message), timeout=5)
+                              await asyncio.wait_for(self.process_rcon_messages(message), timeout=30)
                         
 
                     except asyncio.TimeoutError as e:
@@ -165,6 +170,7 @@ class RconManager:
                          await asyncio.sleep(2) 
 
                     except Exception as e:
+                    
                          print(f"⚠️ : Error while listening to RCON messages: {e}")
                
 
@@ -181,5 +187,6 @@ class RconManager:
           if parsed_response["Identifier"] in self.pending_responses:
                self.pending_responses[parsed_response["Identifier"]].set_result(message.data)
                del self.pending_responses[parsed_response["Identifier"]]
+               return 
 
 
