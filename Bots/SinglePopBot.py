@@ -70,6 +70,8 @@ class SinglePopBot(commands.Bot):
                               )
                          ) 
                          continue
+                    elif not response:
+                         continue
 
 
                     #PopInfo
